@@ -41,8 +41,11 @@ module.exports = (passport) => {
       const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [
         id,
       ]);
-      const user = rows[0];
 
+      const user = rows[0];
+      if (!user) {
+        return done(null, false);
+      }
       done(null, user);
     } catch (err) {
       done(err);
