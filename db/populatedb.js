@@ -2,9 +2,9 @@ const { pool } = require("./pool");
 
 const SQL = `
     CREATE TABLE IF NOT EXISTS users (
-        id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
-        username VARCHAR(50) NOT NULL,  
-        hash VARCHAR(255) NOT NULL
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    hash VARCHAR(255) NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS posts (
