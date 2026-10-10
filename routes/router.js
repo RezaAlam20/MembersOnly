@@ -6,20 +6,33 @@ const passport = require("passport");
 const { getUserById } = require("../db/db");
 
 router.get("/", async (req, res) => {
-  const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [
-    req.user.id,
-  ]);
-  console.log(rows);
-  res.render("main", { user: rows[0] });
+  if (!req.isAuthenticated()) {
+    console.log("You aren't Authenticated");
+    res.redirect("/login");
+  } else if (req.isAuthenticated()) {
+    const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [
+      req.user.id,
+    ]);
+    console.log(rows);
+    res.render("main", { user: rows[0] });
+  }
 });
 router.get("/sign-up", (req, res) => {
-  res.render("sign-up-form");
+  if (req.isAuthenticated()) {
+    res.redirect("/");
+  } else {
+    res.render("sign-up-form");
+  }
 });
 
 router.post("/sign-up", signUp);
 
 router.get("/login", (req, res) => {
-  res.render("login-form");
+  if (req.isAuthenticated()) {
+    res.redirect("/");
+  } else {
+    res.render("login-form");
+  }
 });
 router.post(
   "/login",
