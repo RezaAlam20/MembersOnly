@@ -7,6 +7,11 @@ const getUserById = async (id) => {
   return rows;
 };
 
+
+const submitPost = async(title , description , user ) =>  { 
+  const time = Date.now()
+}
+
 module.exports = {
   getUserById,
 };

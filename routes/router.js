@@ -34,6 +34,17 @@ router.get("/login", (req, res) => {
     res.render("login-form");
   }
 });
+router.get("/post" , (req, res) => { 
+  res.render("createPost")
+
+})
+router.post("/post" , (req, res) => { 
+  if(req.isAuthenticated()){ 
+    const title = req.body.title
+    const description = req.body.description
+    res.redirect("main")
+  }
+})
 router.post(
   "/login",
   passport.authenticate("local", {
