@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { signUp } = require("../controllers/controller");
+const { signUp, getMyPosts, post } = require("../controllers/controller");
 const { pool } = require("../db/pool");
 const passport = require("passport");
 const { getUserById } = require("../db/db");
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   if (!req.isAuthenticated()) {
     console.log("You aren't Authenticated");
     res.redirect("/login");
@@ -13,7 +13,8 @@ router.get("/", async (req, res) => {
     const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [
       req.user.id,
     ]);
-    console.log(rows);
+    const posts = await getMyPosts(req, res, next);
+    console.log(posts);
     res.render("main", { user: rows[0] });
   }
 });
@@ -34,17 +35,15 @@ router.get("/login", (req, res) => {
     res.render("login-form");
   }
 });
-router.get("/post" , (req, res) => { 
-  res.render("createPost")
-
-})
-router.post("/post" , (req, res) => { 
-  if(req.isAuthenticated()){ 
-    const title = req.body.title
-    const description = req.body.description
-    res.redirect("main")
+router.get("/post", (req, res) => {
+  res.render("createPost");
+});
+router.post("/post", async (req, res, next) => {
+  if (req.isAuthenticated()) {
+    await post(req, res, next);
   }
-})
+  res.redirect("/");
+});
 router.post(
   "/login",
   passport.authenticate("local", {
