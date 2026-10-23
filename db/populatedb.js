@@ -9,6 +9,7 @@ const SQL = `
 
     CREATE TABLE IF NOT EXISTS posts (
         id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY, 
+        title VARCHAR(100) NOT NULL,
         user_id INTEGER NOT NULL,
         text VARCHAR(500) NOT NULL, 
         created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP, 
