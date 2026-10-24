@@ -9,5 +9,11 @@
     <h1>main page</h1>
     <h2>Welcome Back <%= user.username %></h2>
   </body>
-  <section></section>
+  <section>
+    <h2>My Posts</h2>
+    <% for(const post of posts){ %> 
+      <h3><%= post.title %></h3>
+      <p><%= post.text %></p>
+    <%}%>
+  </section>
 </html>
