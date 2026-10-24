@@ -52,9 +52,22 @@
       failureMessage: true,
     })(req, res, next);
   }
+
+  const validatePass  = async(req , res , next ) =>  { 
+    const input = req.body.pass 
+    const user = req.user
+    if(input == "password"){ 
+      await pool.query("UPDATE users SET ismember = TRUE WHERE id = $1" , [user.id])
+      res.redirect("/")
+    }
+    else { 
+      res.redirect("/membership")
+    }
+  }
   module.exports = {
     signUp,
     getMyPosts,
     post,
-    login
+    login,
+    validatePass
   };

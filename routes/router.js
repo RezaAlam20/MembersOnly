@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { signUp, getMyPosts, post , login } = require("../controllers/controller");
+const { signUp, getMyPosts, post , login , validatePass} = require("../controllers/controller");
 const { pool } = require("../db/pool");
 const passport = require("passport");
 const { signUpValidator, loginValidator } = require("../validators/validator");
@@ -50,5 +50,13 @@ router.post(
   "/login",loginValidator , login
   
 );
+
+
+
+router.get("/membership" , (req , res , next ) => { 
+   res.render("membership")
+})
+
+router.post("/membership" , validatePass )
 
 module.exports = { router };

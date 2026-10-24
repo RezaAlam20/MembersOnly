@@ -25,4 +25,7 @@ const loginValidator = [
     .withMessage("Password must be at most 128 characters"),
 ];
 
+
+
+
 module.exports = { signUpValidator , loginValidator };
