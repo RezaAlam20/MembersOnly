@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { signUp, getMyPosts, post } = require("../controllers/controller");
+const { signUp, getMyPosts, post , login } = require("../controllers/controller");
 const { pool } = require("../db/pool");
 const passport = require("passport");
+const { signUpValidator, loginValidator } = require("../validators/validator");
 const { getUserById } = require("../db/db");
 
 router.get("/", async (req, res, next) => {
@@ -14,11 +15,12 @@ router.get("/", async (req, res, next) => {
       req.user.id,
     ]);
     const posts = await getMyPosts(req, res, next);
-    console.log(posts);
-    res.render("main", { user: rows[0] });
+    console.log(posts)
+
+    res.render("main", { user: rows[0] , posts : posts });
   }
 });
-router.get("/sign-up", (req, res) => {
+router.get("/sign-up" ,  (req, res) => {
   if (req.isAuthenticated()) {
     res.redirect("/");
   } else {
@@ -26,7 +28,7 @@ router.get("/sign-up", (req, res) => {
   }
 });
 
-router.post("/sign-up", signUp);
+router.post("/sign-up", signUpValidator ,  signUp);
 
 router.get("/login", (req, res) => {
   if (req.isAuthenticated()) {
@@ -45,12 +47,8 @@ router.post("/post", async (req, res, next) => {
   res.redirect("/");
 });
 router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/",
-    failureMessage: true,
-  }),
+  "/login",loginValidator , login
+  
 );
 
 module.exports = { router };
